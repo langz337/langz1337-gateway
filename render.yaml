@@ -1,0 +1,33 @@
+# Render Blueprint: ONE free Docker web service (9Router + cloudflared + bot).
+# Why one service: the free tier gives 750 instance-hours/month per workspace.
+# One service running 24/7 uses ~720h (fits). Two services would use ~1440h
+# and ALL free services get suspended mid-month. So everything runs in a
+# single container and talks over localhost.
+#
+# Secrets are NEVER in this file. Entries with `sync: false` must be filled
+# in the Render dashboard (Environment tab) before the first deploy.
+# See README.md for where each value comes from.
+services:
+  - type: web
+    name: langz1337-gateway
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeployTrigger: off
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: ROUTER_API_KEY
+        generateValue: true
+      - key: ROUTER_DASHBOARD_PASSWORD
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TUNNEL_TOKEN
+        sync: false
+      - key: BOT_ALLOW_CHAT_ID
+        value: "7690336317"
